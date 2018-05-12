@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QImage>
+#include <qtimer.h>
 #include <QPainter>
 #include<QKeyEvent>
 #include "rpgobj.h"
@@ -24,6 +25,7 @@ public:
 
 private:
     Ui::MW1 *ui;
+	QTimer timer;
     World _game;
 };
 

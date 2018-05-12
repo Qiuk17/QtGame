@@ -12,9 +12,10 @@ MW1::MW1(QWidget *parent) :
     ui(new Ui::MW1)
 {
     ui->setupUi(this);
-
+	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(_game.allEnemyMove()));
     //init game world
     _game.initWorld("C:\\Users\\apple\\Desktop\\QTgame\\map.txt");//TODO 应该是输入有效的地图文件
+	timer.start(1000);
 }
 
 MW1::~MW1()

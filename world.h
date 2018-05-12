@@ -25,11 +25,11 @@ public:
         //假定只有一个玩家
 	int isCrashed(Player p, int direction, int steps);
     void save(string mapFile);
-
+	void allEnemyMove(); //Finish This
 private:
     vector<RPGObj> _objs;
 	Player _player;
-    vector<Player> _enemies;
+
 };
 
 #endif // WORLD_H
