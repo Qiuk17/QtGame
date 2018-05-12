@@ -12,10 +12,11 @@ MW1::MW1(QWidget *parent) :
     ui(new Ui::MW1)
 {
     ui->setupUi(this);
-	QObject::connect(&timer, SIGNAL(timeout()), this, SLOT(_game.allEnemyMove()));
+	timer = new QTimer(this);
+	QObject::connect(timer, &QTimer::timeout, this, &MW1::allEnemyMove);
     //init game world
     _game.initWorld("C:\\Users\\apple\\Desktop\\QTgame\\map.txt");//TODO 应该是输入有效的地图文件
-	timer.start(1000);
+	timer->start(10);
 }
 
 MW1::~MW1()
@@ -56,4 +57,10 @@ void MW1::keyPressEvent(QKeyEvent *e)
         this->_game.save("C:\\Users\\apple\\Desktop\\QTgame\\map.txt");
     }
     this->repaint();
+}
+
+void MW1::allEnemyMove()
+{
+	_game.allEnemyMove();
+	this->repaint();
 }

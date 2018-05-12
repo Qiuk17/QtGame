@@ -26,10 +26,11 @@ public:
 	int isCrashed(Player p, int direction, int steps);
     void save(string mapFile);
 	void allEnemyMove(); //Finish This
+	void handleEnemyMove(Player &e,int );
 private:
     vector<RPGObj> _objs;
 	Player _player;
-
+	vector<Player> _enemies;
 };
 
 #endif // WORLD_H

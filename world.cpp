@@ -28,6 +28,13 @@ void World::initWorld(string mapFile){
             this->_player.setPosX(PosX);
             this->_player.setPosY(PosY);
         }
+		else if (type.compare("cross") == 0) {
+			Player e;
+			e.initObj(type);
+			e.setPosX(PosX);
+			e.setPosY(PosY);
+			this->_enemies.push_back(e);
+		}
         else{
 			RPGObj* p = new RPGObj(type, PosX, PosY);
             this->_objs.push_back(*p);
@@ -73,12 +80,21 @@ void World::show(QPainter * painter){
         (*it).show(painter);
     }
     this->_player.show(painter);
+	for (auto i = _enemies.begin(); i != _enemies.end(); ++i)
+		(*i).show(painter);
 }
 
 void World::handlePlayerMove(int direction, int steps){
-
-    if(isCrashed(_player,direction,steps) == 2) return;
-    this->_player.move(direction, steps);
+	int rtn;
+    if((rtn = isCrashed(_player,direction,steps)) == 2) return;
+	if (rtn == 3) exit(0);//Game Over
+    _player.move(direction, steps);
+}
+void World::handleEnemyMove(Player &e,int directions) {
+	int rtn;
+	if ((rtn = isCrashed(e,directions,1)) == 2) return;
+	if (rtn == 3) exit(0);
+	e.move(directions);
 }
 inline bool inRange(int a,int inf,int sup){
     if(a>=inf&&a<=sup) return true;
@@ -135,8 +151,9 @@ void World::save(string mapFile){
 
 void World::allEnemyMove()
 {
+	//_player.move(rand() % 4 + 1);
 	for (auto I = _enemies.begin(); I != _enemies.end(); ++I)
 	{
-		//Finish This
+		handleEnemyMove((*I), rand() % 4 + 1);
 	}
 }

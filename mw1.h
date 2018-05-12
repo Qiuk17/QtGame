@@ -22,10 +22,10 @@ public:
     ~MW1();
     void paintEvent(QPaintEvent *e);
     void keyPressEvent(QKeyEvent *);
-
+	void allEnemyMove();
 private:
     Ui::MW1 *ui;
-	QTimer timer;
+	QTimer* timer;
     World _game;
 };
 
