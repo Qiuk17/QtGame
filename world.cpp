@@ -133,3 +133,11 @@ void World::save(string mapFile){
                <<(*it).getPosY();
     }
 }
+
+void World::allEnemyMove()
+{
+	for (auto I = _enemies.begin(); I != _enemies.end(); ++I)
+	{
+		//Finish This
+	}
+}
