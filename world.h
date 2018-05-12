@@ -23,12 +23,13 @@ public:
         //显示游戏世界所有对象
     void handlePlayerMove(int direction, int steps);
         //假定只有一个玩家
-    int isCrashed(int direction, int steps);
+	int isCrashed(Player p, int direction, int steps);
     void save(string mapFile);
 
 private:
     vector<RPGObj> _objs;
-    Player _player;
+	Player _player;
+    vector<Player> _enemies;
 };
 
 #endif // WORLD_H

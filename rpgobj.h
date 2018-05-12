@@ -11,6 +11,7 @@ using namespace std;
 class RPGObj
 {
 public:
+	RPGObj(){}
     RPGObj(string type, int posx, int posy): _pos_x(posx), _pos_y(posy), _erased(false)
     {
         initObj(type);
@@ -21,6 +22,7 @@ public:
 
     void setPosX(int x){_pos_x = x; }
     void setPosY(int y){_pos_y = y; }
+	void erase() { _erased = true; }
 
     int getPosX() const{return _pos_x; }
     int getPosY() const{return _pos_y; }
@@ -31,11 +33,17 @@ public:
 	int getCPosY() const { return _pos_y + GAME_IMPACT_SET[getObjType()][3]; }
     int getCHeight() const {return GAME_IMPACT_SET[getObjType()][1]; }
 	int getCWidth() const { return GAME_IMPACT_SET[getObjType()][0]; }
-    virtual void interact(RPGObj &obj);
+    //virtual void interact(RPGObj &obj);
     string getObjType() const{return this->_icon.getTypeName();}//返回类名
 
+	bool canCover() const { return _coverable; }
+	bool canEat() const { return _eatable; }
+	bool isDeathly() const { return _deathly; }
 protected:
     //所有坐标，单位均为游戏中的格
+	bool _eatable;
+	bool _coverable;
+	bool _deathly;
 
     QImage _pic;
     int _pos_x, _pos_y;//该物体在游戏中当前位置（左上角坐标）

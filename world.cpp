@@ -29,10 +29,7 @@ void World::initWorld(string mapFile){
             this->_player.setPosY(PosY);
         }
         else{
-            RPGObj* p = new RPGObj;
-            p->initObj(type);
-            p->setPosX(PosX);
-            p->setPosY(PosY);
+			RPGObj* p = new RPGObj(type, PosX, PosY);
             this->_objs.push_back(*p);
         }
         std::cout<<type<<' '<<PosX<<' '<<PosY<<std::endl;
@@ -80,16 +77,16 @@ void World::show(QPainter * painter){
 
 void World::handlePlayerMove(int direction, int steps){
 
-    if(isCrashed(direction,steps) == 2) return;
+    if(isCrashed(_player,direction,steps) == 2) return;
     this->_player.move(direction, steps);
 }
 inline bool inRange(int a,int inf,int sup){
     if(a>=inf&&a<=sup) return true;
     else return false;
 }
-int World::isCrashed(int direction,int steps){
-    int curX = _player.getPosX();
-    int curY = _player.getPosY();
+int World::isCrashed(Player p,int direction,int steps){
+    int curX = p.getCPosX();
+    int curY = p.getCPosY();
     switch (direction){
         case 1:
             curY -= steps;
@@ -106,20 +103,22 @@ int World::isCrashed(int direction,int steps){
     }
 
     for(vector<RPGObj>::iterator it = _objs.begin();it!=_objs.end();++it){
-        if(inRange(curX,(*it).getPosX(),(*it).getPosX()+(*it).getWidth()-1)
-                &&inRange(curY,(*it).getPosY(),(*it).getPosY()+(*it).getHeight()-1)){
-            if((*it).canEat()){
-                _objs.erase(it);
-                return 1;
-            }
-            if((*it).isDeathly()){
-                return 3;
-            }
-            if(!(*it).canCover()){
-                return 2;
-            }
-        }
+        if(inRange(curX,(*it).getCPosX(),(*it).getCPosX()+(*it).getCWidth() - 1)
+			&& inRange(curY, (*it).getCPosY(), (*it).getCPosY() + (*it).getCHeight() - 1)) {
+			if ((*it).canEat()) {
+				(*it).erase();
+				return 1;
+			}
+			else if (!(*it).canCover()) return 2;
+			else if ((*it).isDeathly()) return 3;
+		}
     }
+	for (vector<Player>::iterator it = _enemies.begin(); it != _enemies.end(); ++it) {
+		if (inRange(curX, (*it).getCPosX(), (*it).getCPosX() + (*it).getCWidth() - 1)
+			&& inRange(curY, (*it).getCPosY(), (*it).getCPosY() + (*it).getCHeight() - 1)) {
+			if ((*it).isDeathly()) return 3;
+		}
+	}
     return 0;
 }
 

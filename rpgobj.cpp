@@ -8,7 +8,7 @@ pair<string, int*> _pairArray[] =
 	make_pair("stone", new int[4]{1, 1, 0, 0}),
 	make_pair("fruit", new int[4]{1, 1, 0, 0}),
 	make_pair("well", new int[4]{2, 2, 0, 0}),
-	make_pair("pillar", new int[4]{1, 2, 0, 1}),
+	make_pair("pillar", new int[4]{1, 1, 0, 1}),
 	make_pair("statue", new int[4]{1, 1, 0, 1}),
 	make_pair("floor", new int[4]{0, 0, 0, 0}),
 	make_pair("cross", new int[4]{1, 1, 0, 0})
@@ -19,30 +19,46 @@ map<string, int*> RPGObj::GAME_IMPACT_SET(_pairArray, _pairArray + sizeof(_pairA
 void RPGObj::initObj(string type)
 {
     //TODO 所支持的对象类型应定义为枚举
-    if (type.compare("player")==0){
-
-    }
-    else if (type.compare("stone")==0){
-
-    }
-    else if (type.compare("fruit")==0){
-
-    }
-    else if(type.compare("well")==0){
-
-    }
-    else if(type.compare("pillar")==0){
-
-    }
-    else if(type.compare("statue")==0){
-
-    }
-    else if(type.compare("floor")==0){
-
-    }
-    else if(type.compare("cross")==0){
-
-    }
+	if (type.compare("player") == 0) {
+		this->_coverable = false;
+		this->_eatable = false;
+		this->_deathly = false;
+	}
+	else if (type.compare("stone") == 0) {
+		this->_coverable = false;
+		this->_eatable = false;
+		this->_deathly = false;
+	}
+	else if (type.compare("fruit") == 0) {
+		this->_coverable = false;
+		this->_eatable = true;
+		this->_deathly = false;
+	}
+	else if (type.compare("well") == 0) {
+		this->_coverable = false;
+		this->_eatable = false;
+		this->_deathly = false;
+	}
+	else if (type.compare("pillar") == 0) {
+		this->_coverable = false;
+		this->_eatable = false;
+		this->_deathly = false;
+	}
+	else if (type.compare("statue") == 0) {
+		this->_coverable = false;
+		this->_eatable = false;
+		this->_deathly = false;
+	}
+	else if (type.compare("floor") == 0) {
+		this->_coverable = true;
+		this->_eatable = false;
+		this->_deathly = false;
+	}
+	else if (type.compare("cross") == 0) {
+		this->_coverable = true;
+		this->_eatable = false;
+		this->_deathly = true;
+	}
     else{
         //TODO 应由专门的错误日志文件记录
         cout<<"invalid ICON type."<<endl;
@@ -56,10 +72,8 @@ void RPGObj::initObj(string type)
 }
 
 void RPGObj::show(QPainter * pa){
-    int gSize = ICON::GRID_SIZE;
-    if(getObjType().compare("player") == 0)
-    pa->drawImage(this->_pos_x*gSize,(this->_pos_y-1)*gSize,this->_pic);
-    else pa->drawImage(this->_pos_x*gSize,this->_pos_y*gSize,this->_pic);
+	int gSize = ICON::GRID_SIZE;
+    pa->drawImage(this->_pos_x*gSize,this->_pos_y*gSize,this->_pic);
 }
 
 void RPGObj::show(QPainter *pa, int x, int y){
