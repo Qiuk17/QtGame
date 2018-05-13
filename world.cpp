@@ -3,6 +3,7 @@
 #include<iostream>
 #include<fstream>
 #include<stdlib.h>
+
 void World::initWorld(string mapFile){
     ifstream ReadMap;
     ReadMap.open(mapFile.c_str());
@@ -87,7 +88,7 @@ void World::show(QPainter * painter){
 void World::handlePlayerMove(int direction, int steps){
 	int rtn;
     if((rtn = isCrashed(_player,direction,steps)) == 2) return;
-	if (rtn == 3) exit(0);//Game Over
+	if (rtn == 3) exit(0);
     _player.move(direction, steps);
 }
 void World::handleEnemyMove(Player &e,int directions) {
@@ -117,6 +118,10 @@ int World::isCrashed(Player p,int direction,int steps){
             curX += steps;
             break;
     }
+
+	if (p.getObjType().compare("cross") == 0) {
+		if (curX == _player.getCPosX() && curY == _player.getCPosY()) return 3;
+	}
 
     for(vector<RPGObj>::iterator it = _objs.begin();it!=_objs.end();++it){
         if(inRange(curX,(*it).getCPosX(),(*it).getCPosX()+(*it).getCWidth() - 1)

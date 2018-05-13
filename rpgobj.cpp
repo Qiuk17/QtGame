@@ -22,7 +22,7 @@ void RPGObj::initObj(string type)
 	if (type.compare("player") == 0) {
 		this->_coverable = false;
 		this->_eatable = false;
-		this->_deathly = false;
+		this->_deathly = true;
 	}
 	else if (type.compare("stone") == 0) {
 		this->_coverable = false;

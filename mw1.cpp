@@ -16,7 +16,7 @@ MW1::MW1(QWidget *parent) :
 	QObject::connect(timer, &QTimer::timeout, this, &MW1::allEnemyMove);
     //init game world
     _game.initWorld("C:\\Users\\apple\\Desktop\\QTgame\\map.txt");//TODO 应该是输入有效的地图文件
-	timer->start(10);
+	timer->start(1000);
 }
 
 MW1::~MW1()
