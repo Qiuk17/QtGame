@@ -3,6 +3,7 @@
 #include<iostream>
 #include<fstream>
 #include<stdlib.h>
+#include <queue>
 
 void World::initWorld(string mapFile){
     ifstream ReadMap;
@@ -70,19 +71,29 @@ void World::initWorld(string mapFile){
 
 
 void World::show(QPainter * painter){
+	if (!_sync) return;
+	_sync = false;
     RPGObj f;f.initObj("floor");
-    for(int i = 0;i<=20;i++){
+    for(int i = 0;i<=24;i++){
         for(int j = 0;j<=20;j++){
             f.show(painter,i,j);
         }
     }
-    vector<RPGObj>::iterator it;
-    for(it=this->_objs.begin();it!=this->_objs.end();it++){
-        (*it).show(painter);
+	vector<RPGObj> allElem;
+    for(auto it=this->_objs.begin();it!=this->_objs.end();++it){
+        //(*it).show(painter);
+		if (it->getErased())
+			continue;
+		allElem.push_back(*it);
     }
-    this->_player.show(painter);
-	for (auto i = _enemies.begin(); i != _enemies.end(); ++i)
-		(*i).show(painter);
+	allElem.push_back(_player);
+	for (auto it = _enemies.begin(); it != _enemies.end(); ++it)
+		//(*it).show(painter);
+		allElem.push_back(*it);
+	sort(allElem.begin(), allElem.end());
+	for (auto it = allElem.begin(); it != allElem.end(); ++it)
+		(*it).show(painter);
+	_sync = true;
 }
 
 void World::handlePlayerMove(int direction, int steps){
@@ -137,7 +148,7 @@ int World::isCrashed(Player p,int direction,int steps){
 	for (vector<Player>::iterator it = _enemies.begin(); it != _enemies.end(); ++it) {
 		if (inRange(curX, (*it).getCPosX(), (*it).getCPosX() + (*it).getCWidth() - 1)
 			&& inRange(curY, (*it).getCPosY(), (*it).getCPosY() + (*it).getCHeight() - 1)) {
-			if ((*it).isDeathly()) return 3;
+			if (!(*it).getObjType().compare("player")) return 3;
 		}
 	}
     return 0;
@@ -149,9 +160,14 @@ void World::save(string mapFile){
     WriteMap.open(mapFile.c_str(),ios::ate);
     WriteMap<<"player "<<_player.getPosX()<<' '<<_player.getPosY();
     for(vector<RPGObj>::iterator it = _objs.begin();it!=_objs.end();++it){
+		if (it->getErased()) continue;
         WriteMap<<std::endl<<(*it).getObjType()<<' '<<(*it).getPosX()<<' '
                <<(*it).getPosY();
     }
+	for (auto it = _enemies.begin(); it != _enemies.end(); ++it) {
+		WriteMap << std::endl << (*it).getObjType() << ' ' << (*it).getPosX() << ' '
+			<< (*it).getPosY();
+	}
 }
 
 void World::allEnemyMove()

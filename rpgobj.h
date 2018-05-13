@@ -39,6 +39,7 @@ public:
 	bool canCover() const { return _coverable; }
 	bool canEat() const { return _eatable; }
 	bool isDeathly() const { return _deathly; }
+	bool operator < (const RPGObj& rhs) const { return getCPosY() < rhs.getCPosY(); }
 protected:
     //所有坐标，单位均为游戏中的格
 	bool _eatable;

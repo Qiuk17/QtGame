@@ -9,7 +9,7 @@
 class World
 {
 public:
-    World(){}
+	World() { _sync = true; }
     ~World(){}
     void initWorld(string mapFile);
         //输入的文件中定义了初始状态下游戏世界有哪些对象，出生点在哪
@@ -30,6 +30,7 @@ private:
     vector<RPGObj> _objs;
 	Player _player;
 	vector<Player> _enemies;
+	volatile bool _sync;
 };
 
 #endif // WORLD_H
